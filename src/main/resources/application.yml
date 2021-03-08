@@ -1,0 +1,30 @@
+spring:
+  thymeleaf:
+    mode: HTML
+
+  profiles:
+    active: dev
+
+  messages:
+    basename: i18n/messages
+
+
+
+  web:
+    resources:
+      static-locations: classpath:/templates/,classpath:/static/
+
+comment.avatar: /images/(36).jpg
+
+upyun:
+  bucketName: image-jishanle2
+  username: jishanle2
+  password: 7QI9vLIrfYvg4iORflAS98GCy9wIZJmv
+  hostName: test.upcdn.net
+
+
+
+
+
+
+

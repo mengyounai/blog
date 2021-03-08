@@ -1,0 +1,259 @@
+
+body{
+    background: url("../images/bg.png");
+}
+
+
+.m-padded-mini{
+    padding: 0.2em !important;
+}
+.m-padded-tiny{
+    padding: 0.3em !important;
+}
+.m-padded{
+    padding: 1em !important;
+}
+.m-padded-tn-mini{
+    padding-top:0.2em !important;
+    padding-bottom: 0.2em !important;
+}
+.m-padding-tb-tiny{
+    padding-top:0.3em !important;
+    padding-bottom: 0.3em !important;
+}
+.m-padding-tb-small{
+    padding-top:0.5em !important;
+    padding-bottom: 0.5em !important;
+}
+.m-padding-tb{
+    padding-top:1em !important;
+    padding-bottom: 1em !important;
+}
+.m-padding-tb-large{
+    padding-top:2em !important;
+    padding-bottom: 2em !important;
+}
+.m-padding-tb-big{
+    padding-top:3em !important;
+    padding-bottom: 3em !important;
+}
+.m-padding-tb-huge{
+    padding-top:4em !important;
+    padding-bottom: 4em !important;
+}
+.m-padding-tb-massive{
+    padding-top:5em !important;
+    padding-bottom: 5em !important;
+}
+.m-padded-lr-responsive{
+    padding-left: 4em !important;
+    padding-right: 4em !important;
+}
+
+/*text*/
+.m-text{
+    font-weight:300 !important;
+    font-weight:300 !important;
+    letter-spacing: 1px !important;
+}
+.m-text-thin{
+    font-weight:300 !important;
+}
+.m-text-spaced{
+    letter-spacing: 1px !important;
+}
+.m-text-lined{
+    line-height: 1.8;
+}
+
+
+
+
+/*opacity*/
+.m-opacity-mini{
+    opacity: 0.8 !important;
+
+}
+.m-opacity-tiny{
+    opacity: 0.6 !important;
+
+}
+
+/*margin*/
+.m-margin-tb-tiny{
+    margin-top: 0.3em !important;
+    margin-bottom: 0.3em !important;
+
+}
+.m-margin-top{
+    margin-top: 1em !important;
+}
+.m-margin-top-small{
+    margin-top: 0.5em !important;
+}
+.m-margin-top-large{
+    margin-top: 2em !important;
+}
+.m-margin-bottom-small{
+    margin-bottom: 0.5em !important;
+}
+
+/*position*/
+.m-right-top{
+    position: absolute;
+    top:0;
+    right: 0;
+}
+.m-fixed{
+    position: fixed !important;
+    z-index: 1 !important;
+}
+.m-right-bottom{
+    bottom: 0 !important;
+    right: 0 !important;
+}
+
+
+
+/*display*/
+.m-inline-block{
+    display: inline-block;
+}
+
+/*container*/
+.m-container{
+    max-width: 72em !important;
+    margin: auto !important;
+}
+.m-container-small{
+    max-width: 60em !important;
+    margin: auto !important;
+}
+
+/*color*/
+.m-black{
+    color: #333 !important;
+}
+
+.m-teal{
+    color: #00B5AD !important;
+}
+
+
+.m-mobile-show{
+    display: none !important;
+}
+
+/*shadow*/
+.m-shadow-small{
+    -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    box-shadow:0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+
+@media screen and (max-width: 768px) {
+    .m-mobile-hide{
+        display: none !important;
+    }
+    .m-mobile-show{
+        display: block !important;
+    }
+    .m-padded-lr-responsive{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .m-mobile-lr-clear{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .m-mobile-wide{
+        width: 100% !important;
+    }
+}
+
+
+.largeImg {
+    width: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    height: 500px;
+    position: relative;
+}
+
+.mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    background: rgba(102, 102, 102, .6);
+}
+
+.mask_head {
+    position: absolute;
+    width: 100%!important;
+    height: 100px !important;
+    top: 35%;
+    line-height: 100px;
+    text-align: center;
+    opacity: 0.8;
+    font-size: 4em;
+    font-weight: 700;
+    color: #fff;
+}
+
+.mask_head_image {
+    position: absolute;
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50px;
+    left: 50%;
+    margin-left: -50px;
+    object-fit: cover;
+    overflow: hidden;
+    top: 35%;
+    overflow: hidden;
+    border: 1px currentColor solid;
+    opacity: 0.8;
+}
+
+.mask_head_text {
+    position: absolute;
+    width: 100%!important;
+    height: 100px !important;
+    top: 60%;
+    line-height: 100px;
+    text-align: center;
+    opacity: 0.8;
+    font-size: 2em;
+    font-style: italic;
+    color: #fff;
+}
+
+.mask_description {
+    position: absolute;
+    top: 62%;
+    color: #fff;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    font-size: 3em;
+    opacity: 0.8;
+}
+
+.largeImg_img {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    margin-top: 10px;
+    transform: translate(0%, -50%);
+}
+
+.mask_head_image img {
+    position: absolute;
+    height: 108px;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%,-50%);
+}

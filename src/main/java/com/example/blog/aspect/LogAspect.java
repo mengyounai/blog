@@ -15,12 +15,13 @@ import java.util.Arrays;
 @Component
 public class LogAspect {
 
-    private final Logger logger=LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Pointcut("execution(* com.example.blog.web.*.*(..))")
-    public void log(){
+    public void log() {
 
     }
+
     @Before("log()")
     public void doBefore(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -32,18 +33,20 @@ public class LogAspect {
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
         logger.info("Request : {}", requestLog);
     }
+
     @After("log()")
-    public void doAfter(){
+    public void doAfter() {
 //        logger.info("----------doAfter--------------");
 
     }
 
-    @AfterReturning(returning = "result",pointcut = "log()")
-    public void doAfterRuturn(Object result){
-        logger.info("Result : {}",result);
+    @AfterReturning(returning = "result", pointcut = "log()")
+    public void doAfterRuturn(Object result) {
+        logger.info("Result : {}", result);
 
     }
-    private class RequestLog{
+
+    private class RequestLog {
         private String url;
         private String ip;
         private String classMethod;
@@ -55,6 +58,7 @@ public class LogAspect {
             this.classMethod = classMethod;
             this.args = args;
         }
+
         @Override
         public String toString() {
             return "{" +
@@ -65,5 +69,5 @@ public class LogAspect {
                     '}';
         }
 
-}
+    }
 }

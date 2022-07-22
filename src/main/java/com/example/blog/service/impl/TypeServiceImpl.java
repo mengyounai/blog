@@ -71,6 +71,6 @@ public class TypeServiceImpl implements TypeService {
     @Transactional
     @Override
     public void deleteType(Long id) {
-         typeRepository.deleteById(id);
+        typeRepository.deleteById(id);
     }
 }

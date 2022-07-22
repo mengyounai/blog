@@ -6,14 +6,14 @@ public class MailUtils {
 
     // 发件人邮箱
     private static String MAIL_ADDRESS = "2193873302@qq.com";
-//    // 发件人
+    //    // 发件人
 //    private static String MAIL_USER = "无限缤纷";
 //    // 邮件的名称
 //    private static String MAIL_NAME = "无限缤纷博客, 网址: 2193873302@qq.com";
     // 上面获取的客户端授权码
     private static String MAIL_PASS = "kwkndeablbltecaf";
 
-    public static boolean sendHtmlEmail(String emailaddress, String msg,String MAIL_USER,String MAIL_NAME) {
+    public static boolean sendHtmlEmail(String emailaddress, String msg, String MAIL_USER, String MAIL_NAME) {
         try {
             HtmlEmail email = new HtmlEmail();// 创建一个HtmlEmail实例对象
             email.setHostName("smtp.qq.com");// 设置服务器 126邮箱为smtp.126.com,163邮箱为163.smtp.com，QQ为smtp.qq.com

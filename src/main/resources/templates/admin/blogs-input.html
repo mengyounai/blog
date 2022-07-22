@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>博客发布</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
   <link rel="stylesheet" href="../../static/css/me.css">
 </head>
@@ -83,7 +83,7 @@
   <!--中间内容-->
   <div  class="m-container m-padded-tb-big">
     <div class="ui container">
-      <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" method="post" class="ui form">
+      <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" enctype="multipart/form-data" method="post" class="ui form">
         <input type="hidden" name="published" th:value="*{published}">
         <input type="hidden" name="id" th:value="*{id}">
         <div class="required field">
@@ -140,16 +140,15 @@
         <div class="required field">
           <div class="ui left labeled input">
             <label class="ui teal basic label">首图</label>
-            <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="首图引用地址">
+<!--            <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="首图引用地址">-->
+            <input type="file" name="file00"  accept="image/*" placeholder="首图引用地址">
           </div>
         </div>
-        <!--<div class="form-group" style="width: 400px;height: 300px;">-->
-          <!--<label>图片</label><input  type="text" hidden="hidden" th:value="*{firstPicture}">-->
-          <!--<div class="file-loading" >-->
-            <!--<input id="input-id" type="file" > <p>支持jpg、jpeg、png、gif格式，大小1M</p>-->
-          <!--</div>-->
-        <!--</div>-->
+        <div class="required field">
+          <img id="firstPicture" th:src="*{firstPicture}" style="width: 1000px" >
+        </div>
 
+<!--        <img id="firstPicture" th:src="*{firstPicture}" style="width: 100px;height: 100px;">-->
         <div class="required field">
           <textarea name="description" th:text="*{description}" placeholder="博客描述..." maxlength="200"></textarea>
         </div>
@@ -227,14 +226,14 @@
         </div>
       </div>
       <div class="ui inverted section divider"></div>
-      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Lirenmi Designed by Lirenmi</p>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 无限缤纷 Designed by 无限缤纷</p>
     </div>
 
   </footer>
 
   <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+  <script src="/js/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
   <!--/*/</th:block>/*/-->
 
 

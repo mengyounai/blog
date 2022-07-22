@@ -8,8 +8,6 @@ spring:
   messages:
     basename: i18n/messages
 
-
-
   web:
     resources:
       static-locations: classpath:/templates/,classpath:/static/

@@ -29,7 +29,6 @@ public class CommentController {
     private BlogService blogService;
 
 
-
     @Value("${comment.avatar}")
     private String avatar;
 
@@ -57,14 +56,13 @@ public class CommentController {
         } else {
             comment.setAvatar(avatar);
         }
-        Blog blog=blogService.getBlog(comment.getBlog().getId());
-        String blogname=blog.getTitle();
+        Blog blog = blogService.getBlog(comment.getBlog().getId());
+        String blogname = blog.getTitle();
 
         commentService.saveComment(comment);
-        MailUtils.sendHtmlEmail("2193873302@qq.com",comment.getContent(),comment.getNickname(),blogname);
+        MailUtils.sendHtmlEmail("2193873302@qq.com", comment.getContent(), comment.getNickname(), blogname);
         return "redirect:/comments/" + blogId;
     }
-
 
 
 }

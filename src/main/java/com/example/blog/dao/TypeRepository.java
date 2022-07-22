@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.awt.print.Pageable;
 import java.util.List;
 
-public interface TypeRepository extends JpaRepository<Type,Long> {
+public interface TypeRepository extends JpaRepository<Type, Long> {
 
     Type findByName(String name);
 

@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface BlogRepository extends JpaRepository<Blog,Long>, JpaSpecificationExecutor<Blog> {
+public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificationExecutor<Blog> {
 
-    @Query("select b from Blog b where b.recommend=true")
+    @Query("select b from Blog b where b.recommend=true and b.published=true ")
     List<Blog> findTop(Pageable pageable);
+
+    @Query("select b from Blog b where b.published=true ")
+    Page<Blog> findTop2(Pageable pageable);
 
     @Query("select b from Blog b where b.title like ?1 or b.content like ?1")
     Page<Blog> findByQuery(String query, Pageable pageable);

@@ -1,6 +1,7 @@
 package com.example.blog.po;
 
 import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

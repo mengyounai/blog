@@ -25,9 +25,9 @@ public class TypeController {
     private TypeService typeService;
 
     @GetMapping("/types")
-    public String types(@PageableDefault(size = 3,sort = {"id"},direction = Sort.Direction.DESC)
+    public String types(@PageableDefault(size = 3, sort = {"id"}, direction = Sort.Direction.DESC)
                                 Pageable pageable, Model model) {
-        model.addAttribute("page",typeService.listType(pageable));
+        model.addAttribute("page", typeService.listType(pageable));
         return "admin/types.html";
     }
 
@@ -36,40 +36,42 @@ public class TypeController {
         model.addAttribute("type", new Type());
         return "admin/types-input";
     }
+
     @GetMapping("/types/{id}/input")
-    public String editInput(@PathVariable Long id, Model model){
-        model.addAttribute("type",typeService.getType(id));
+    public String editInput(@PathVariable Long id, Model model) {
+        model.addAttribute("type", typeService.getType(id));
         return "admin/types-input";
     }
 
     @PostMapping("/types")
-    public String post(@Valid Type type, BindingResult result, RedirectAttributes attributes){
-        Type type1=typeService.getTypeByname(type.getName());
-        if (type1!=null){
-            result.rejectValue("name","nameError","不能重复添加分类");
-        }
-        if (result.hasErrors()){
-            return "admin/types-input";
-        }
-        Type t=typeService.savaType(type);
-        if (t==null){
-            attributes.addFlashAttribute("message","操作失败");
-        }else {
-            attributes.addFlashAttribute("message","操作成功");
-        }
-        return "redirect:/admin/types";
-    }
-    @PostMapping("/types/{id}")
-    public String editPost(@Valid Type type, BindingResult result,@PathVariable Long id, RedirectAttributes attributes) {
+    public String post(@Valid Type type, BindingResult result, RedirectAttributes attributes) {
         Type type1 = typeService.getTypeByname(type.getName());
         if (type1 != null) {
-            result.rejectValue("name","nameError","不能添加重复的分类");
+            result.rejectValue("name", "nameError", "不能重复添加分类");
         }
         if (result.hasErrors()) {
             return "admin/types-input";
         }
-        Type t = typeService.updateType(id,type);
-        if (t == null ) {
+        Type t = typeService.savaType(type);
+        if (t == null) {
+            attributes.addFlashAttribute("message", "操作失败");
+        } else {
+            attributes.addFlashAttribute("message", "操作成功");
+        }
+        return "redirect:/admin/types";
+    }
+
+    @PostMapping("/types/{id}")
+    public String editPost(@Valid Type type, BindingResult result, @PathVariable Long id, RedirectAttributes attributes) {
+        Type type1 = typeService.getTypeByname(type.getName());
+        if (type1 != null) {
+            result.rejectValue("name", "nameError", "不能添加重复的分类");
+        }
+        if (result.hasErrors()) {
+            return "admin/types-input";
+        }
+        Type t = typeService.updateType(id, type);
+        if (t == null) {
             attributes.addFlashAttribute("message", "更新失败");
         } else {
             attributes.addFlashAttribute("message", "更新成功");
@@ -78,12 +80,11 @@ public class TypeController {
     }
 
     @GetMapping("/types/{id}/delete")
-    public String delete(@PathVariable Long id,RedirectAttributes attributes) {
+    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         typeService.deleteType(id);
-        attributes.addFlashAttribute("message", "删除成功");
+        attributes.addFlashAttribute("message", "删除分类成功");
         return "redirect:/admin/types";
     }
-
 
 
 }

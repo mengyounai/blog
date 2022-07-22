@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>博客详情</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="/css/typo.css">
   <link rel="stylesheet" href="/css/animate.css">
   <link rel="stylesheet" href="/lib/prism/prism.css">
@@ -684,15 +684,15 @@ h5,h6{font-size:1em;}
         </div>
       </div>
       <div class="ui inverted section divider"></div>
-      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Lirenmi Designed by Lirenmi</p>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 无限缤纷 Designed by 无限缤纷</p>
     </div>
 
   </footer>
 
   <!--/*/<th:block th:replace="_fragments :: script">/*/-->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  <script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+  <script src="/js/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
+  <script src="/js/jquery.scrollTo.min.js" th:src="@{/js/jquery.scrollTo.min.js}"></script>
   
 <script src="/lib/prism/prism.js"></script>
 <script src="/lib/tocbot/tocbot.min.js"></script>

@@ -12,7 +12,7 @@ public interface CommentService {
 
     List<Comment> listCommentByBlogId(Long blogId);
 
-    Page<Comment> listCommentByBlogId(Long blogId,Pageable pageable);
+    Page<Comment> listCommentByBlogId(Long blogId, Pageable pageable);
 
     Comment saveComment(Comment comment);
 

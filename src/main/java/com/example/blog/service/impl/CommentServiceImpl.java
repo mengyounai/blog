@@ -24,13 +24,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> listCommentByBlogId(Long blogId) {
         Sort sort = Sort.by("createTime");
-        List<Comment> comments = commentRepository.findByBlogIdAndParentCommentNull(blogId,sort);
+        List<Comment> comments = commentRepository.findByBlogIdAndParentCommentNull(blogId, sort);
         return eachComment(comments);
     }
 
     @Override
     public Page<Comment> listCommentByBlogId(Long blogId, Pageable pageable) {
-        return commentRepository.findByBlogIdAndParentCommentNull(blogId,pageable);
+        return commentRepository.findByBlogIdAndParentCommentNull(blogId, pageable);
     }
 
     @Transactional
@@ -54,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 循环每个顶级的评论节点
+     *
      * @param comments
      * @return
      */
@@ -61,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentsView = new ArrayList<>();
         for (Comment comment : comments) {
             Comment c = new Comment();
-            BeanUtils.copyProperties(comment,c);
+            BeanUtils.copyProperties(comment, c);
             commentsView.add(c);
         }
         //合并评论的各层子代到第一级子代集合中
@@ -70,7 +71,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     *
      * @param comments root根节点，blog不为空的对象集合
      * @return
      */
@@ -78,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
 
         for (Comment comment : comments) {
             List<Comment> replys1 = comment.getReplyComments();
-            for(Comment reply1 : replys1) {
+            for (Comment reply1 : replys1) {
                 //循环迭代，找出子代，存放在tempReplys中
                 recursively(reply1);
             }
@@ -91,17 +91,19 @@ public class CommentServiceImpl implements CommentService {
 
     //存放迭代找出的所有子代的集合
     private List<Comment> tempReplys = new ArrayList<>();
+
     /**
      * 递归迭代，剥洋葱
+     *
      * @param comment 被迭代的对象
      * @return
      */
     private void recursively(Comment comment) {
         tempReplys.add(comment);//顶节点添加到临时存放集合，第二层评论
-        if (comment.getReplyComments().size()>0) {
+        if (comment.getReplyComments().size() > 0) {
             List<Comment> replys = comment.getReplyComments();
             for (Comment reply : replys) {
-                if (reply.getReplyComments().size()>0) {
+                if (reply.getReplyComments().size() > 0) {
                     recursively(reply); // 递归调用，第四层评论
                 } else {
                     tempReplys.add(reply); // 第三层评论

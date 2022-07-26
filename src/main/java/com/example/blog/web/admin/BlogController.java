@@ -93,7 +93,7 @@ public class BlogController {
             UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());
             String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
             String name = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
-            String fileName = name + CodeCreateUtils.get4Code(4) + "." + format;
+            String fileName = "/test/" +name + CodeCreateUtils.get4Code(4) + "." + format;
             boolean b1 = upYun.writeFile(fileName, file.getInputStream(), true, new HashMap<>());
             if (!b1) {
                 attributes.addFlashAttribute("message", "新增失败");

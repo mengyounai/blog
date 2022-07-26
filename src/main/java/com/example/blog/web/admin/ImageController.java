@@ -24,12 +24,6 @@ public class ImageController {
     @Autowired
     private UpYunConfig upYunConfig;
 
-    @GetMapping("/q")
-    public String test(){
-        return "你好";
-    }
-
-
     @PostMapping("/upload")
     public ResultVO upload(@RequestParam("file_data") MultipartFile multipartFile) throws IOException, UpException {
         UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());

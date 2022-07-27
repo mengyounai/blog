@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -21,10 +22,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/admin")
                 .excludePathPatterns("/admin/login")
                 .excludePathPatterns("/admin/bindUserIdAndToken")
-                .excludePathPatterns("/admin/getLoginQr");
+                .excludePathPatterns("/admin/getLoginQr")
+                .excludePathPatterns("/websocket/**")
+                .excludePathPatterns("/admin/loginNoCheck");
 
         super.addInterceptors(registry);
     }
+
 
 
 }

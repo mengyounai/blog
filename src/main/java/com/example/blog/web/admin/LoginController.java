@@ -3,6 +3,10 @@ package com.example.blog.web.admin;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.example.blog.config.WebSocketConfig;
+import com.example.blog.config.WebSocketServer;
 import com.example.blog.po.Token;
 import com.example.blog.po.User;
 import com.example.blog.service.ITokenService;
@@ -20,9 +24,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
+@CrossOrigin
 public class LoginController {
 
     @Autowired
@@ -84,6 +94,36 @@ public class LoginController {
         return "admin/index";
     }
 
+    @GetMapping("/loginNoCheck")
+    public String adminLoginNoCheck(HttpServletRequest request,
+                             HttpServletResponse response,RedirectAttributes attributes) {
+        String username = "季善乐";
+        User user = userService.findUser(username);
+        if (EmptyUtil.isEmpty(user)) {
+            attributes.addFlashAttribute("message", "用户名或密码错误");
+            return "redirect:/admin";
+        }
+        //存token进数据库
+        Token token = tokenService.findByUserName(username);
+        if (EmptyUtil.isEmpty(token)){
+            token =  new Token();
+        }
+        String tokenUUID = UUID.randomUUID().toString();
+
+        token.setInfo(username);
+        token.setTokenUUID(tokenUUID);
+        tokenService.addToken(token);
+        //存token进cookie
+        Cookie cookie=new Cookie("token",tokenUUID);
+        //这里需要注意要将cookie路径设置为根目录
+        cookie.setPath("/");
+        //设置到期时间为一个月 默认-1关闭浏览器即消失
+        cookie.setMaxAge(60 * 60 * 24 * 30);
+        response.addCookie(cookie);
+        request.getSession().setAttribute("user", user);
+        return "admin/index";
+    }
+
     //获取登录二维码、放入Token
     @GetMapping( "/getLoginQr")
     public void createCodeImg(HttpServletRequest request, HttpServletResponse response){
@@ -94,10 +134,11 @@ public class LoginController {
         try {
             //这里没啥操作 就是生成一个UUID插入 数据库的表里
             String uuid = UUID.randomUUID().toString();
+            response.addHeader("Access-Control-Expose-Headers", "uuid");
             response.setHeader("uuid", uuid);
             // 网址：http://hutool.mydoc.io/
 //            QrCodeUtil.generate("http://hutool.cn/", 300, 300, FileUtil.file("d:/qrcode.jpg"));
-            String url = "http://192.168.1.60:8083/admin/bindUserIdAndToken?token="+uuid+"&userId=1";
+            String url = "http://192.168.117.230:8083/admin/bindUserIdAndToken?token="+uuid+"&userId=1";
             QrCodeUtil.generate(url, 300, 300, "jpg",response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,12 +154,12 @@ public class LoginController {
     public String bindUserIdAndToken(@RequestParam("token") String token ,
                                      @RequestParam("userId") Long userId,
                                      @RequestParam(required = false,value = "projId") Integer projId,
-                                     HttpServletRequest request,HttpServletResponse response){
+                                     HttpServletRequest request,HttpServletResponse response) throws IOException {
 
-        String requestSessionId = request.getRequestedSessionId();
-        if (!requestSessionId.equals("F2E495AA63F02D77D321911112ECC94F")){
-            return "非管理员用户";
-        }
+//        String requestSessionId = request.getRequestedSessionId();
+//        if (!requestSessionId.equals("2DAA8DEAC46B85DEBF32850B7ACE08C2")){
+//            return "非管理员用户";
+//        }
         User user = new User();
         try {
              user = userService.bindUserIdAndToken(userId, token, projId);
@@ -133,6 +174,9 @@ public class LoginController {
             //设置到期时间为一个月 默认-1关闭浏览器即消失
             cookie.setMaxAge(60 * 60 * 24 * 30);
             response.addCookie(cookie);
+
+            WebSocketServer.sendInfo(JSONObject.toJSONString(user),null);
+
             return "admin/index";
         }else {
             return "redirect:/admin";

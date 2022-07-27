@@ -43,6 +43,12 @@ public class LoginInterceptor  implements HandlerInterceptor {
         log.info("preHandle Interceptor路径：" + requestURL);
         //自动登录检查业务逻辑
         //获取cookie中的token，查询该token在服务器中是否存在，如果存在说明登录过，创建session对话，将对象塞入（不拦截）
+        HttpSession session1 = request.getSession();
+        Object user1 = session1.getAttribute("user");
+        if (request.getSession().getAttribute("user") != null) {
+            return true;
+        }
+
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {

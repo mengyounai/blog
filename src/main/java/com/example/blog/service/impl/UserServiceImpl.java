@@ -40,13 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User bindUserIdAndToken(Long userId, String token, Integer projId) throws Exception {
-//        Token qrLoginToken = new Token();
-//        qrLoginToken.setTokenUUID(token);
-//        qrLoginToken = tokenRepository.findByTokenUUID(token);
-//
-//        if(EmptyUtil.isEmpty(qrLoginToken)){
-//            throw  new Exception("错误的请求！");
-//        }
         String userName= "季善乐";
         //存token进数据库
         Token qrLoginToken = tokenService.findByUserName(userName);
@@ -83,7 +76,7 @@ public class UserServiceImpl implements UserService {
         if(EmptyUtil.isNotEmpty(projId)){
             jsonObject.put("projId",projId);
         }
-        WebSocketServer.sendInfo(jsonObject.toJSONString(),token);
+//        WebSocketServer.sendInfo(jsonObject.toJSONString(),token);
 
         if(EmptyUtil.isNotEmpty(save) ){
             return userRepository.findByUsername(userName);

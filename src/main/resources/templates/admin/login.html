@@ -87,7 +87,6 @@
     xmlhttp.open("GET",getQrPath,true);
     xmlhttp.responseType = "blob";
     xmlhttp.onload = function(){
-      console.log(this);
       uuid = this.getResponseHeader("uuid");
 
       if (this.status == 200) {
@@ -108,6 +107,7 @@
 
 
 
+
   var path = "://localhost:8083";
   var getQrPath =  "http" + path + "/admin/getLoginQr";
   var wsPath =     "ws" + path + "/websocket/";
@@ -121,8 +121,9 @@
     }else{
       console.log("您的浏览器支持WebSocket");
       //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-      //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");
+      // socket = new WebSocket("ws://localhost:8083/websocket/2");
       var wsPathStr = wsPath+uuid;
+      console.log(wsPathStr);
       socket = new WebSocket(wsPathStr);
       //打开事件
       socket.onopen = function() {
@@ -131,16 +132,11 @@
       };
       //获得消息事件
       socket.onmessage = function(msg) {
-        console.log(msg.data);
+        console.log(msg);
         var data = JSON.parse(msg.data);
-        if(data.code == 200){
-          alert("登录成功！");
-          //这里存放自己业务需要的数据。怎么放自己看
-          window.sessionStorage.uuid = uuid;
-          window.sessionStorage.userId = data.userId;
-          window.sessionStorage.projId = data.projId;
-
-          window.location.href = "pages/upload.html"
+        console.log(data)
+        if(data!=null){
+          window.location.href = "admin/loginNoCheck"
         }else{
           //如果过期了，关闭连接、重置连接、刷新二维码
           socket.close();
@@ -154,7 +150,7 @@
       };
       //发生了错误事件
       socket.onerror = function() {
-        // alert("Socket发生了错误");
+        alert("Socket发生了错误");
         //此时可以尝试刷新页面
       }
     }

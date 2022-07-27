@@ -10,11 +10,14 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 
-@ServerEndpoint("/websocket/{sid}")
+
+@ServerEndpoint(value ="/websocket/{sid}")
 @Component
 public class WebSocketServer {
 

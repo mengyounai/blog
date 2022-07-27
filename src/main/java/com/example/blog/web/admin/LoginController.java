@@ -1,6 +1,8 @@
 package com.example.blog.web.admin;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.example.blog.po.Token;
 import com.example.blog.po.User;
 import com.example.blog.service.ITokenService;
@@ -80,6 +82,62 @@ public class LoginController {
 //        session.setAttribute("user", user);
         request.getSession().setAttribute("user", user);
         return "admin/index";
+    }
+
+    //获取登录二维码、放入Token
+    @GetMapping( "/getLoginQr")
+    public void createCodeImg(HttpServletRequest request, HttpServletResponse response){
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        try {
+            //这里没啥操作 就是生成一个UUID插入 数据库的表里
+            String uuid = UUID.randomUUID().toString();
+            response.setHeader("uuid", uuid);
+            // 网址：http://hutool.mydoc.io/
+//            QrCodeUtil.generate("http://hutool.cn/", 300, 300, FileUtil.file("d:/qrcode.jpg"));
+            String url = "http://192.168.1.60:8083/admin/bindUserIdAndToken?token="+uuid+"&userId=1";
+            QrCodeUtil.generate(url, 300, 300, "jpg",response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 确认身份接口：确定身份以及判断是否二维码过期等
+     * @param token
+     * @param userId
+     * @return
+     */
+    @GetMapping("/bindUserIdAndToken")
+    public String bindUserIdAndToken(@RequestParam("token") String token ,
+                                     @RequestParam("userId") Long userId,
+                                     @RequestParam(required = false,value = "projId") Integer projId,
+                                     HttpServletRequest request,HttpServletResponse response){
+
+        String requestSessionId = request.getRequestedSessionId();
+        if (!requestSessionId.equals("F2E495AA63F02D77D321911112ECC94F")){
+            return "非管理员用户";
+        }
+        User user = new User();
+        try {
+             user = userService.bindUserIdAndToken(userId, token, projId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (EmptyUtil.isNotEmpty(user)){
+            request.getSession().setAttribute("user", user);
+            Cookie cookie=new Cookie("token",token);
+            //这里需要注意要将cookie路径设置为根目录
+            cookie.setPath("/");
+            //设置到期时间为一个月 默认-1关闭浏览器即消失
+            cookie.setMaxAge(60 * 60 * 24 * 30);
+            response.addCookie(cookie);
+            return "admin/index";
+        }else {
+            return "redirect:/admin";
+        }
+
     }
 
 

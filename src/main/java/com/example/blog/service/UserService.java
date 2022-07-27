@@ -7,4 +7,6 @@ public interface UserService {
     User checkUser(String username, String password);
 
     User findUser(String userName);
+
+    User bindUserIdAndToken(Long userId, String token,Integer projId) throws Exception;
 }

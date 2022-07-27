@@ -18,6 +18,4 @@ public class Token {
     private String info;
     private String tokenUUID;
 
-
-
 }

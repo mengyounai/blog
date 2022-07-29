@@ -59,7 +59,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
                     //查找数据库中是否有该token对象
                     String username = "";
                     try {
-                         username = tokenService.searchToken(token);
+                         username = tokenService.getUserName(token);
                     }catch (Exception e){
                         log.info("错误提示：",e);
                     }

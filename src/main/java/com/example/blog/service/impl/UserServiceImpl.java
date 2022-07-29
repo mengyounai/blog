@@ -3,8 +3,10 @@ package com.example.blog.service.impl;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSONObject;
 import com.example.blog.config.WebSocketServer;
+import com.example.blog.constants.ReturnCode;
 import com.example.blog.dao.TokenRepository;
 import com.example.blog.dao.UserRepository;
+import com.example.blog.exception.ServiceException;
 import com.example.blog.po.Token;
 import com.example.blog.po.User;
 import com.example.blog.service.ITokenService;
@@ -14,6 +16,7 @@ import com.example.blog.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.server.ServerCloneException;
 import java.util.Date;
 
 @Service
@@ -39,18 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User bindUserIdAndToken(Long userId, String token, Integer projId) throws Exception {
-        String userName= "季善乐";
+    public User bindUserIdAndToken(Long userId, String token, Integer projId)  {
         //存token进数据库
-        Token qrLoginToken = tokenService.findByUserName(userName);
-        if (EmptyUtil.isEmpty(token)){
-            qrLoginToken =  new Token();
+        Token qrLoginToken = tokenService.findByToken(token);
+        if (EmptyUtil.isEmpty(qrLoginToken)){
+            throw  new ServiceException(ReturnCode.token_expired_code,"Token不存在！");
         }
-        String tokenUUID = UUID.randomUUID().toString();
-
-        qrLoginToken.setInfo(userName);
-        qrLoginToken.setTokenUUID(tokenUUID);
-        tokenService.addToken(qrLoginToken);
 
 //        Date createDate = new Date(qrLoginToken.getCreateTime().getTime() + (1000 * 60 * 20));
 //        Date nowDate = new Date();
@@ -65,9 +62,8 @@ public class UserServiceImpl implements UserService {
 //        }
 
         qrLoginToken.setLoginTime(new Date());
-        qrLoginToken.setUserId(userId);
 
-        Token save = tokenRepository.save(qrLoginToken);
+        Token save = tokenService.addToken(qrLoginToken);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",200);
@@ -79,9 +75,9 @@ public class UserServiceImpl implements UserService {
 //        WebSocketServer.sendInfo(jsonObject.toJSONString(),token);
 
         if(EmptyUtil.isNotEmpty(save) ){
-            return userRepository.findByUsername(userName);
+            return userRepository.findByUsername(save.getInfo());
         }else{
-            throw  new Exception("服务器异常！");
+            throw  new ServiceException(ReturnCode.error_code,"服务器异常！");
         }
     }
 }

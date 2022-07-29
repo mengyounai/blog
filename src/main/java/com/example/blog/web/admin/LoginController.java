@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -95,12 +96,13 @@ public class LoginController {
     }
 
     @GetMapping("/loginNoCheck")
-    public String adminLoginNoCheck(HttpServletRequest request,
+    public String adminLoginNoCheck(@RequestParam("token") String uuid ,HttpServletRequest request,
                              HttpServletResponse response,RedirectAttributes attributes) {
-        String username = "季善乐";
+        String username = tokenService.getUserName(uuid);
+
         User user = userService.findUser(username);
         if (EmptyUtil.isEmpty(user)) {
-            attributes.addFlashAttribute("message", "用户名或密码错误");
+            attributes.addFlashAttribute("message", "token失效");
             return "redirect:/admin";
         }
         //存token进数据库
@@ -132,13 +134,26 @@ public class LoginController {
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");
         try {
+            String username = "季善乐";
+            Token token =tokenService.findByUserName(username);
+            if (EmptyUtil.isEmpty(token)){
+                token = new Token();
+            }
+            String tokenUUID = UUID.randomUUID().toString();
+
+            token.setInfo(username);
+            token.setUserId(1L);
+            token.setState(1);
+            token.setCreateTime(new Date());
+            token.setTokenUUID(tokenUUID);
+            tokenService.addToken(token);
             //这里没啥操作 就是生成一个UUID插入 数据库的表里
-            String uuid = UUID.randomUUID().toString();
+
             response.addHeader("Access-Control-Expose-Headers", "uuid");
-            response.setHeader("uuid", uuid);
+            response.setHeader("uuid", tokenUUID);
             // 网址：http://hutool.mydoc.io/
 //            QrCodeUtil.generate("http://hutool.cn/", 300, 300, FileUtil.file("d:/qrcode.jpg"));
-            String url = "http://192.168.117.230:8083/admin/bindUserIdAndToken?token="+uuid+"&userId=1";
+            String url = "http://192.168.1.60:8083/admin/bindUserIdAndToken?token="+tokenUUID+"&userId=1";
             QrCodeUtil.generate(url, 300, 300, "jpg",response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,11 +176,9 @@ public class LoginController {
 //            return "非管理员用户";
 //        }
         User user = new User();
-        try {
-             user = userService.bindUserIdAndToken(userId, token, projId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        user = userService.bindUserIdAndToken(userId, token, projId);
+
         if (EmptyUtil.isNotEmpty(user)){
             request.getSession().setAttribute("user", user);
             Cookie cookie=new Cookie("token",token);

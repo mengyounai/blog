@@ -4,9 +4,11 @@ import com.example.blog.po.Token;
 
 public interface ITokenService {
 
-    boolean addToken(Token token);
+    Token addToken(Token token);
 
-    String searchToken(String tokenUUID);
+    String getUserName(String tokenUUID);
 
     Token findByUserName(String userName);
+
+    Token findByToken(String token);
 }

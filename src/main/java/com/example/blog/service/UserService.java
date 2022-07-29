@@ -8,5 +8,5 @@ public interface UserService {
 
     User findUser(String userName);
 
-    User bindUserIdAndToken(Long userId, String token,Integer projId) throws Exception;
+    User bindUserIdAndToken(Long userId, String token,Integer projId) ;
 }

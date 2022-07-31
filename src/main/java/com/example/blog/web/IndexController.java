@@ -32,8 +32,8 @@ public class IndexController {
         model.addAttribute("types", typeService.listTypeTop(6));
         model.addAttribute("tags", tagService.listTagTop(10));
         model.addAttribute("recommendBlogs", blogService.listRecommedBlogTop(8));
-//        return "index";
-        return "newDesign/indexNew";
+        return "index";
+//        return "newDesign/indexNew";
     }
 
 
@@ -44,6 +44,7 @@ public class IndexController {
         model.addAttribute("query", query);
         return "search";
     }
+
 
     @GetMapping("/blog/{id}")
     public String blog(@PathVariable Long id, Model model) {

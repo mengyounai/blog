@@ -2,6 +2,9 @@ package com.example.blog.web.admin;
 
 import com.UpYun;
 import com.example.blog.config.UpYunConfig;
+import com.example.blog.po.Blog;
+import com.example.blog.po.User;
+import com.example.blog.util.CodeCreateUtils;
 import com.example.blog.util.ResultVOUtil;
 import com.example.blog.vo.ResultVO;
 import com.upyun.Result;
@@ -11,21 +14,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/image")
 public class ImageController {
 
     @Autowired
     private UpYunConfig upYunConfig;
 
+    @GetMapping
+    public String imageInput() {
+        return "image.html";
+    }
+
+    //新增&更新博客
+    @PostMapping("/blogs")
+    public String post(Blog blog, @RequestParam("file00") MultipartFile file, RedirectAttributes attributes, HttpSession session) throws IOException, UpException {
+
+        String firstPicture = blog.getFirstPicture();
+        //如果file不为空，则上传图片到upyun
+        if (!file.isEmpty()) {
+            UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());
+            String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            String name = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
+            String fileName = "/test/" +name + CodeCreateUtils.get4Code(4) + "." + format;
+            boolean b1 = upYun.writeFile(fileName, file.getInputStream(), true, new HashMap<>());
+            if (!b1) {
+                attributes.addFlashAttribute("message", "新增失败");
+                return "redirect:/admin/blogs";
+            }
+            firstPicture ="http://" + upYunConfig.getBucketName() + "." + upYunConfig.getHostName() + "/" + fileName;
+        }
+
+        return "redirect:/admin/blogs";
+    }
+
     @PostMapping("/upload")
-    public ResultVO upload(@RequestParam("file_data") MultipartFile multipartFile) throws IOException, UpException {
+    public String upload(@RequestParam("file_data") MultipartFile multipartFile,RedirectAttributes attributes, HttpSession session) throws IOException, UpException {
         UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());
         String fileName = String.format("%s.%s",
                 UUID.randomUUID().toString(),
@@ -33,9 +65,10 @@ public class ImageController {
         );
         upYun.writeFile(fileName, multipartFile.getInputStream(), true, new HashMap<>());
         Map map = new HashMap<>();
-        map.put("fileName", fileName);
+//        map.put("fileName", fileName);
         map.put("fileUrl", "http://" + upYunConfig.getBucketName() + "." + upYunConfig.getHostName() + "/" + fileName);
-        return ResultVOUtil.success(map);
+        attributes.addFlashAttribute("map", map);
+        return "redirect:/image";
     }
 
 //    @RequestMapping("/product_add")

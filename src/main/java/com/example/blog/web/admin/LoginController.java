@@ -13,6 +13,7 @@ import com.example.blog.service.ITokenService;
 import com.example.blog.service.UserService;
 import com.example.blog.service.impl.TokenServiceImpl;
 import com.example.blog.util.EmptyUtil;
+import com.example.blog.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -73,13 +74,19 @@ public class LoginController {
             attributes.addFlashAttribute("message", "用户名或密码错误");
             return "redirect:/admin";
         }
+        Map<String,String> map = new HashMap<>();
+        map.put("password",user.getPassword());
+        map.put("userName",user.getUsername());
+        String accessToken = JwtUtil.getToken(map);
+        map.put("accessToken",accessToken);
+        attributes.addFlashAttribute("map", map);
         //存token进数据库
         Token token = tokenService.findByUserName(username);
         if (EmptyUtil.isEmpty(token)){
             token =  new Token();
         }
-        String tokenUUID = UUID.randomUUID().toString();
 
+        String tokenUUID = UUID.randomUUID().toString();
         token.setInfo(username);
         token.setTokenUUID(tokenUUID);
         tokenService.addToken(token);
@@ -90,6 +97,7 @@ public class LoginController {
         //设置到期时间为一个月 默认-1关闭浏览器即消失
         cookie.setMaxAge(60 * 60 * 24 * 30);
         response.addCookie(cookie);
+
 //        session.setAttribute("user", user);
         request.getSession().setAttribute("user", user);
         return "admin/index";

@@ -12,6 +12,7 @@
 <br>
 <br>
 <br>
+
  <div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
    <div class="ur container">
      <div class="ui middle aligned center aligned grid">
@@ -21,7 +22,7 @@
              管理后台登录
            </div>
          </h2>
-         <form class="ui large form" method="get" action="#" th:action="@{/admin/login}">
+         <form id="form" class="ui large form" method="get" action="#" th:action="@{/admin/login}">
            <div class="ui  segment">
              <div class="field">
                <div class="ui left icon input">
@@ -35,7 +36,7 @@
                  <input type="password" name="password" placeholder="密码">
                </div>
              </div>
-             <button class="ui fluid large teal submit button">登   录</button>
+             <button onclick="login();" class="ui fluid large teal submit button">登   录</button>
            </div>
 
            <div class="ui error mini message"></div>
@@ -47,7 +48,6 @@
      </div>
    </div>
  </div>
-
 <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
 <script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script src="/js/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
@@ -72,7 +72,6 @@
       }
     }
   });
-
   //二维码生成
   $(document).ready(function(){
     initQrImg();
@@ -105,13 +104,20 @@
     xmlhttp.send();
   }
 
-
+  function login(){
+    console.log(1)
+    document.getElementById("form").submit();
+     success = function (res) {
+      console.log(res);
+      // 本地存入token
+      localStorage.setItem('accessToken',res['accessToken']);
+    }
+  }
 
 
   var path = "://localhost:8083";
   var getQrPath =  "http" + path + "/admin/getLoginQr";
   var wsPath =     "ws" + path + "/websocket/";
-
 
 
   function initWebSocket(){
@@ -121,7 +127,6 @@
     }else{
       console.log("您的浏览器支持WebSocket");
       //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-      // socket = new WebSocket("ws://localhost:8083/websocket/2");
       var wsPathStr = wsPath+uuid;
       console.log(wsPathStr);
       socket = new WebSocket(wsPathStr);
@@ -158,6 +163,7 @@
     }
 
   }
+
 </script>
 
 </body>

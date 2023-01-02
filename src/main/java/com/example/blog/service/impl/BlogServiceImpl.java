@@ -47,8 +47,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<Blog> listBlog(Pageable pageable, BlogQuery blog) {
-        return blogRepository.findAll(new Specification<Blog>() {
+    public Page<Blog> listBlog(Pageable pageable, BlogQuery blog) {return blogRepository.findAll(new Specification<Blog>() {
             @Override
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                 List<Predicate> predicateList = new ArrayList<>();
@@ -61,7 +60,8 @@ public class BlogServiceImpl implements BlogService {
                 if (blog.isRecommend()) {
                     predicateList.add(cb.equal(root.<Boolean>get("recommend"), blog.isRecommend()));
                 }
-                predicateList.add(cb.equal(root.<Boolean>get("published"), 1));
+//                predicateList.add(cb.equal(root.<Boolean>get("published"), 1));
+                predicateList.add(cb.equal(root.<Boolean>get("isdelete"), 0));
                 cq.where(predicateList.toArray(new Predicate[predicateList.size()]));
 
 //                cq.where(predicateList.toArray(new Predicate[predicateList.size()]));
@@ -141,6 +141,7 @@ public class BlogServiceImpl implements BlogService {
             throw new NotFoundException("该博客不存在");
         }
         BeanUtils.copyProperties(blog, b, MyBeanUtils.getNullPropertyNames(blog));
+        b.setUpdateTime(new Date());
         return blogRepository.save(b);
     }
 
@@ -151,7 +152,7 @@ public class BlogServiceImpl implements BlogService {
         if (null == byId) {
             throw new NotFoundException("该博客不存在");
         }
-        byId.setPublished(false);
+        byId.setIsdelete(true);
         blogRepository.save(byId);
 //        blogRepository.deleteById(id);
     }

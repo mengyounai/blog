@@ -45,6 +45,7 @@ public class ImageController {
             String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
             String name = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
             String fileName = "/test/" +name + CodeCreateUtils.get4Code(4) + "." + format;
+
             boolean b1 = upYun.writeFile(fileName, file.getInputStream(), true, new HashMap<>());
             if (!b1) {
                 attributes.addFlashAttribute("message", "新增失败");
@@ -59,15 +60,27 @@ public class ImageController {
     @PostMapping("/upload")
     public String upload(@RequestParam("file_data") MultipartFile multipartFile,RedirectAttributes attributes, HttpSession session) throws IOException, UpException {
         UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());
-        String fileName = String.format("%s.%s",
-                UUID.randomUUID().toString(),
-                multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1)
-        );
+//        String fileName = String.format("%s.%s",
+//                UUID.randomUUID().toString(),
+//                multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1)
+//        );
+        String format = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
+        String name = multipartFile.getOriginalFilename().substring(0,multipartFile.getOriginalFilename().lastIndexOf("."));
+//        String fileName = "/blog/" +name + CodeCreateUtils.get4Code(4) + "." + format;
+        String fileName = "/blog/" +name +  "." + format;
+        try{
+            String s = upYun.readFile(fileName);
+            fileName = "/blog/" +name + CodeCreateUtils.get4Code(4) + "." + format;
+        }catch (Exception e){
+
+        }
+
         upYun.writeFile(fileName, multipartFile.getInputStream(), true, new HashMap<>());
         Map map = new HashMap<>();
 //        map.put("fileName", fileName);
         map.put("fileUrl", "http://" + upYunConfig.getBucketName() + "." + upYunConfig.getHostName() + "/" + fileName);
         attributes.addFlashAttribute("map", map);
+
         return "redirect:/image";
     }
 

@@ -1,8 +1,12 @@
 package com.example.blog.interceptor;
 
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.blog.po.User;
 import com.example.blog.service.ITokenService;
 import com.example.blog.service.UserService;
+import com.example.blog.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,9 +20,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.security.SignatureException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-public class LoginInterceptor  implements HandlerInterceptor {
+public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     ITokenService tokenService;
@@ -59,7 +67,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
                     //查找数据库中是否有该token对象
                     String username = "";
                     try {
-                         username = tokenService.searchToken(token);
+                         username = tokenService.getUserName(token);
                     }catch (Exception e){
                         log.info("错误提示：",e);
                     }
@@ -88,4 +96,34 @@ public class LoginInterceptor  implements HandlerInterceptor {
         response.sendRedirect("/admin");
         return false;
     }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        Map<String, String> headerMap = new HashMap<>(8);
+//        while (headerNames.hasMoreElements()) {
+//            String name = headerNames.nextElement();
+//            headerMap.put(name, request.getHeader(name));
+//            System.out.println(name + ":" + request.getHeader(name));
+//        }
+//        Map<String,Object> map = new HashMap<>();
+//        String token = request.getHeader("accessToken");
+//        try {
+//            JwtUtil.verifyToken(token);
+//            return true;
+//        }catch (SignatureVerificationException e){
+//            e.printStackTrace();
+//            map.put("msg","无效的token");
+//        }catch (TokenExpiredException e){
+//            e.printStackTrace();
+//            map.put("msg","token已过期");
+//        }catch (AlgorithmMismatchException e){
+//            e.printStackTrace();
+//            map.put("msg","token算法不匹配");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            map.put("msg","token错误");
+//        }
+//        map.put("status",false);
+//        return false;
+//    }
 }

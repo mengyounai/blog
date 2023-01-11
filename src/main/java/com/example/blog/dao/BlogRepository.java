@@ -14,13 +14,13 @@ import java.util.List;
 
 public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificationExecutor<Blog> {
 
-    @Query("select b from Blog b where b.recommend=true and b.published=true ")
+    @Query("select b from Blog b where b.recommend=true and b.published=true and b.isdelete=false ")
     List<Blog> findTop(Pageable pageable);
 
-    @Query("select b from Blog b where b.published=true ")
+    @Query("select b from Blog b where b.published=true and b.isdelete=false ")
     Page<Blog> findTop2(Pageable pageable);
 
-    @Query("select b from Blog b where b.title like ?1 or b.content like ?1")
+    @Query("select b from Blog b where  b.published=true and b.isdelete=false and (b.title like ?1 or b.content like ?1) ")
     Page<Blog> findByQuery(String query, Pageable pageable);
 
     @Transactional

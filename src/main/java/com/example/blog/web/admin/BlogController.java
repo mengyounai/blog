@@ -2,6 +2,7 @@ package com.example.blog.web.admin;
 
 import com.UpYun;
 import com.example.blog.config.UpYunConfig;
+import com.example.blog.dto.BaseUserInfo;
 import com.example.blog.po.Blog;
 import com.example.blog.po.User;
 import com.example.blog.service.BlogService;
@@ -30,7 +31,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
-public class BlogController {
+public class BlogController extends BaseController {
 
     private static final String INPUT = "admin/blogs-input";
     private static final String LIST = "admin/blogs";
@@ -51,6 +52,7 @@ public class BlogController {
     @GetMapping("/blogs")
     public String blogs(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model,
                         BlogQuery blog) {
+
         model.addAttribute("types", typeService.listType());
         model.addAttribute("page", blogService.listBlog(pageable, blog));
         return LIST;
@@ -84,6 +86,7 @@ public class BlogController {
         return INPUT;
     }
 
+    //新增&更新博客
     @PostMapping("/blogs")
     public String post(Blog blog, @RequestParam("file00") MultipartFile file, RedirectAttributes attributes, HttpSession session) throws IOException, UpException {
 

@@ -31,6 +31,7 @@ public class Blog {
     private boolean commentabled;
     private boolean published;
     private boolean recommend;
+    private boolean isdelete;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
@@ -212,6 +213,14 @@ public class Blog {
         this.tagIds = tagsToIds(this.getTags());
     }
 
+    public boolean isIsdelete() {
+        return isdelete;
+    }
+
+    public void setIsdelete(boolean isdelete) {
+        this.isdelete = isdelete;
+    }
+
     //1,2,3
     private String tagsToIds(List<Tag> tags) {
         if (!tags.isEmpty()) {
@@ -231,7 +240,6 @@ public class Blog {
         }
     }
 
-
     @Override
     public String toString() {
         return "Blog{" +
@@ -246,6 +254,7 @@ public class Blog {
                 ", commentabled=" + commentabled +
                 ", published=" + published +
                 ", recommend=" + recommend +
+                ", isdelete=" + isdelete +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", type=" + type +

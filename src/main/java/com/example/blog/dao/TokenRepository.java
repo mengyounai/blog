@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
-    Token findByTokenUUID(String tokenUUID);
+    Token findByTokenUUIDAndState(String tokenUUID,Integer state);
 
     Token findByInfo(String userName);
+
 }

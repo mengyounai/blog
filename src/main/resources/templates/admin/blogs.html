@@ -205,8 +205,15 @@
         loaddata();
     }
 
+    $('#search-btn')
+        .on('click', function () {
+            $(this)
+                loaddata();
+        });
+
     function loaddata() {
         $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+
             title : $("[name='title']").val(),
             typeId : $("[name='typeId']").val(),
             recommend : $("[name='recommend']").prop('checked'),

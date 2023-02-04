@@ -33,7 +33,7 @@
 </nav>
 
 <!--中间内容-->
-<form id="image-form" action="#"  th:action="@{/image/upload}" enctype="multipart/form-data" method="post" class="ui form">
+<form id="image-form" action="#"  th:action="@{/admin/image/upload}" enctype="multipart/form-data" method="post" class="ui form">
     <input type="file" name="file_data"  accept="image/*" placeholder="上传图片地址">
     <button type="button" id="image-btn" class="ui teal button">上传图片</button>
     <h1 th:text="${map}">图片地址</h1>

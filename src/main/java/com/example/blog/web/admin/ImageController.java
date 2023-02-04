@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/image")
+@RequestMapping("admin/image")
 public class ImageController {
 
     @Autowired
@@ -57,6 +57,7 @@ public class ImageController {
         return "redirect:/admin/blogs";
     }
 
+    //上传图片
     @PostMapping("/upload")
     public String upload(@RequestParam("file_data") MultipartFile multipartFile,RedirectAttributes attributes, HttpSession session) throws IOException, UpException {
         UpYun upYun = new UpYun(upYunConfig.getBucketName(), upYunConfig.getUsername(), upYunConfig.getPassword());
@@ -81,7 +82,7 @@ public class ImageController {
         map.put("fileUrl", "http://" + upYunConfig.getBucketName() + "." + upYunConfig.getHostName() + "/" + fileName);
         attributes.addFlashAttribute("map", map);
 
-        return "redirect:/image";
+        return "redirect:/admin/image";
     }
 
 //    @RequestMapping("/product_add")

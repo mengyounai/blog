@@ -7,9 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-/**
- * Created by limi on 2017/10/16.
- */
+
 public interface TagService {
 
     Tag saveTag(Tag type);
@@ -19,7 +17,6 @@ public interface TagService {
     Tag getTagByName(String name);
 
     Page<Tag> listTag(Pageable pageable);
-
 
     List<Tag> listTag();
 

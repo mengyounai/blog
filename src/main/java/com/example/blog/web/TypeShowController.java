@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * Created by limi on 2017/10/23.
- */
+
 @Controller
 public class TypeShowController {
 
